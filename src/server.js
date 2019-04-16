@@ -2,6 +2,7 @@
 // require("dotenv").config({
 //   path: path.resolve(__dirname, "..", ".devenv")
 // });
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();

@@ -24,6 +24,6 @@ const fileSchema = new mongoose.Schema(
 
 fileSchema.virtual("url").get(function() {
   const { URL } = process.env;
-  return `${URL}/api/users/${this.path}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+  return `${URL}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
 });
 module.exports = new mongoose.model("File", fileSchema);

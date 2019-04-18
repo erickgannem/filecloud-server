@@ -13,7 +13,7 @@ class FileController {
       foundFolder.files.push(newFile._id);
       await newFile.save();
       await foundFolder.save();
-      return res.status(200).json(newFile);
+      return res.status(200).json(newFile.populate("folder"));
     } catch (err) {
       return next(err);
     }

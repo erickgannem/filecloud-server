@@ -15,7 +15,7 @@ const fileSchema = new mongoose.Schema(
       ref: "Folder"
     },
     owner: {
-      type: mongoose.Schema.Types.String,
+      type: String,
       ref: "User"
     }
   },

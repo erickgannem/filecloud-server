@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const db = require("./index");
 
 const fileSchema = new mongoose.Schema(
   {
@@ -14,6 +13,10 @@ const fileSchema = new mongoose.Schema(
     folder: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Folder"
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   },
   { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } }
@@ -21,6 +24,6 @@ const fileSchema = new mongoose.Schema(
 
 fileSchema.virtual("url").get(function() {
   const { URL } = process.env;
-  return `${URL}/api/users/${user._id}/folders/${folder._id}/${encodeURIComponent(this.path)}`;
+  return `${URL}/api/users/${this.path}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
 });
 module.exports = new mongoose.model("File", fileSchema);

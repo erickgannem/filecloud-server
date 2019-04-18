@@ -9,6 +9,7 @@ class FileController {
       });
       const foundFolder = await db.Folder.findById(req.params.folder_id);
       newFile.folder = foundFolder._id;
+      newFile.owner = foundFolder.owner;
       foundFolder.files.push(newFile._id);
       await newFile.save();
       await foundFolder.save();

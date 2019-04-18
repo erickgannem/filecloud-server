@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const db = require("./index");
 
 const folderSchema = new mongoose.Schema(
   {

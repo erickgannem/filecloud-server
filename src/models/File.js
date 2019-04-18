@@ -15,8 +15,7 @@ const fileSchema = new mongoose.Schema(
       ref: "Folder"
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      type: mongoose.Schema.Types.String
     }
   },
   { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } }

@@ -1,9 +1,7 @@
-// const path = require("path");
-// require("dotenv").config({
-//   path: path.resolve(__dirname, "..", ".devenv")
-// });
-require("dotenv").config();
 const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, "..", ".env")
+});
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -12,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const errorHandler = require("./handlers/error");
 const folderRoutes = require("./routes/folder");
 const fileRoutes = require("./routes/files");
+const verificationTokenRoutes = require("./routes/token");
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +20,7 @@ app.use(
   express.static(path.resolve(__dirname, "..", "tmp"))
 );
 app.use(authRoutes);
+app.use(verificationTokenRoutes);
 app.use(folderRoutes);
 app.use(fileRoutes);
 
@@ -31,4 +31,4 @@ app.use(function(req, res, next) {
 });
 app.use(errorHandler);
 
-app.listen(PORT, console.log(`Running on port: ${PORT}`));
+app.listen(PORT, console.log(`Running at: ${process.env.URL}${PORT}`));

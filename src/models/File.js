@@ -15,7 +15,7 @@ const fileSchema = new mongoose.Schema(
       ref: "Folder"
     },
     owner: {
-      type: mongoose.Schema.Types.String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
   },
@@ -23,7 +23,9 @@ const fileSchema = new mongoose.Schema(
 );
 
 fileSchema.virtual("url").get(function() {
-  const { URL } = process.env;
-  return `${URL}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+  // const { URL } = process.env;
+  // return `${URL}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+  const { URL, PORT } = process.env;
+  return `${URL}${PORT}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
 });
 module.exports = new mongoose.model("File", fileSchema);

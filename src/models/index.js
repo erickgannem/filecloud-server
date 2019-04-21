@@ -17,3 +17,4 @@ mongoose.connect(
 module.exports.User = require("./User");
 module.exports.Folder = require("./Folder");
 module.exports.File = require("./File");
+module.exports.Token = require("./Token");

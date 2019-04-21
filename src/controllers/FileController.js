@@ -8,12 +8,13 @@ class FileController {
         path: req.file.key
       });
       const foundFolder = await db.Folder.findById(req.params.folder_id);
+
       newFile.folder = foundFolder._id;
       newFile.owner = foundFolder.owner;
       foundFolder.files.push(newFile._id);
       await newFile.save();
       await foundFolder.save();
-      return res.status(200).json(newFile);
+      return res.status(200).json(newFile.populate("User"));
     } catch (err) {
       return next(err);
     }

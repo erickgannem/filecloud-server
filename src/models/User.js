@@ -5,13 +5,13 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
-      unique: true
+      unique: true,
+      required: true
     },
     email: {
       type: String,
-      required: true,
-      unique: true
+      unique: true,
+      required: true
     },
     password: {
       type: String,
@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
     },
     profileImageUrl: {
       type: String
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
     folders: [
       {

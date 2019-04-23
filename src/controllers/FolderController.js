@@ -14,7 +14,7 @@ class FolderController {
       await folder.save();
 
       const foundFolder = await db.Folder.findById(folder._id).populate("User");
-
+      // dejé aqui ayer
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);

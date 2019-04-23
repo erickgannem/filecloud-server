@@ -6,6 +6,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 8080;
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./handlers/error");
 const folderRoutes = require("./routes/folder");
@@ -13,6 +16,16 @@ const fileRoutes = require("./routes/files");
 const verificationTokenRoutes = require("./routes/token");
 
 app.use(cors());
+
+io.on("connection", socket => {
+  socket.on("connectRoom", folder => {
+    socket.join(folder);
+  });
+});
+app.use((req, res, next) => {
+  req.io = io;
+  return next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -31,4 +44,4 @@ app.use(function(req, res, next) {
 });
 app.use(errorHandler);
 
-app.listen(PORT, console.log(`Running at: ${process.env.URL}${PORT}`));
+server.listen(PORT, console.log(`Running at: ${process.env.URL}${PORT}`));

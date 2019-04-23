@@ -2,10 +2,14 @@ const db = require("../models");
 const jwt = require("jsonwebtoken");
 const sendgridMail = require("@sendgrid/mail");
 const crypto = require("crypto");
+const isEmail = require("validator/lib/isEmail");
 
 class User {
   async signup(req, res, next) {
     try {
+      if (!isEmail(req.body.email))
+        throw new Error("Please, provide a valid email");
+
       const user = await db.User.create(req.body);
       const { _id, username, email, password } = user;
       const token = jwt.sign(
@@ -41,6 +45,8 @@ class User {
   }
   async signin(req, res, next) {
     try {
+      if (!isEmail(req.body.email))
+        throw new Error("Please, enter a valid email");
       const foundUser = await db.User.findOne({
         email: req.body.email
       }).populate("folders", { _id: true, title: true, files: true });

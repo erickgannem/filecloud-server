@@ -18,8 +18,8 @@ const verificationTokenRoutes = require("./routes/token");
 app.use(cors());
 
 io.on("connection", socket => {
-  socket.on("connectRoom", folder => {
-    socket.join(folder);
+  socket.on("userSession", userId => {
+    socket.join(userId);
   });
 });
 app.use((req, res, next) => {

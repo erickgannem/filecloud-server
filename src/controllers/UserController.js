@@ -63,6 +63,7 @@ class User {
               { _id, username, email, password, folders },
               process.env.SECRET_KEY
             );
+            req.io.sockets.in(foundUser._id).emit("user", foundUser);
             return res
               .status(200)
               .json({ _id, username, token, email, password, folders });

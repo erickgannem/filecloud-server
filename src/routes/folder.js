@@ -15,7 +15,12 @@ routes.get(
   verifyCorrectUser,
   FolderController.showOne
 );
-
+routes.delete(
+  `/api/users/:user_id/folders/:folder_id`,
+  loginRequired,
+  verifyCorrectUser,
+  FolderController.deleteOne
+);
 routes.post(
   `/api/users/:user_id/folders`,
   loginRequired,

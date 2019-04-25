@@ -1,5 +1,6 @@
 const db = require("../models");
-
+const fs = require("fs");
+const path = require("path");
 class FolderController {
   async create(req, res, next) {
     try {
@@ -14,7 +15,7 @@ class FolderController {
       await folder.save();
 
       const foundFolder = await db.Folder.findById(folder._id).populate("User");
-      // dejé aqui ayer
+      req.io.sockets.in(foundUser._id).emit("folder", folder);
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);
@@ -36,6 +37,27 @@ class FolderController {
       const foundFolder = await db.Folder.findById(
         req.params.folder_id
       ).populate("files");
+      return res.status(200).json(foundFolder);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  // WIP
+  async deleteOne(req, res, next) {
+    try {
+      const foundFolder = await db.Folder.findById(req.params.folder_id);
+      for (let i = 0; i < foundFolder.files.length; i++) {
+        const foundFile = await db.File.findById(foundFolder.files[i]);
+        fs.unlink(
+          path.resolve(__dirname, "..", "..", "tmp", foundFile["path"]),
+          err => next(err)
+        );
+        foundFolder.files.remove(foundFile._id);
+      }
+      const foundUser = await db.User.findById(req.params.user_id);
+      foundUser.folders.remove(foundFolder._id);
+      await foundUser.save();
+      await foundFolder.remove();
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);

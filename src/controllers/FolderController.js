@@ -45,19 +45,25 @@ class FolderController {
   // WIP
   async deleteOne(req, res, next) {
     try {
-      const foundFolder = await db.Folder.findById(req.params.folder_id);
-      for (let i = 0; i < foundFolder.files.length; i++) {
-        const foundFile = await db.File.findById(foundFolder.files[i]);
-        fs.unlink(
-          path.resolve(__dirname, "..", "..", "tmp", foundFile["path"]),
-          err => next(err)
-        );
-        foundFolder.files.remove(foundFile._id);
+      const foundFolder = await db.Folder.findById(
+        req.params.folder_id
+      ).populate("files");
+      if (!!foundFolder.files.length) {
+        foundFolder.files.forEach(file => {
+          fs.unlink(
+            path.resolve(__dirname, "..", "..", "tmp", file.path),
+            err => {
+              if (err) throw err;
+              file.remove();
+            }
+          );
+        });
       }
-      const foundUser = await db.User.findById(req.params.user_id);
+      const foundUser = await db.User.findById(foundFolder.owner);
       foundUser.folders.remove(foundFolder._id);
       await foundUser.save();
       await foundFolder.remove();
+
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);

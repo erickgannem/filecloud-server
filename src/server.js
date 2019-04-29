@@ -15,6 +15,8 @@ const folderRoutes = require("./routes/folder");
 const fileRoutes = require("./routes/files");
 const verificationTokenRoutes = require("./routes/token");
 
+const chalk = require("chalk");
+
 app.use(cors());
 
 io.on("connection", socket => {
@@ -44,4 +46,7 @@ app.use(function(req, res, next) {
 });
 app.use(errorHandler);
 
-server.listen(PORT, console.log(`Running at: ${process.env.URL}${PORT}`));
+server.listen(
+  PORT,
+  console.log(chalk.bgGreen.black(`Running at: ${process.env.URL}${PORT}`))
+);

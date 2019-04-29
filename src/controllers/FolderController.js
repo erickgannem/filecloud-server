@@ -15,7 +15,7 @@ class FolderController {
       await folder.save();
 
       const foundFolder = await db.Folder.findById(folder._id).populate("User");
-      req.io.sockets.in(foundUser._id).emit("folder", folder);
+      req.io.sockets.in(foundUser._id).emit("create folder", folder);
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);
@@ -64,6 +64,7 @@ class FolderController {
       await foundUser.save();
       await foundFolder.remove();
 
+      req.io.sockets.in(foundUser._id).emit("delete folder", foundFolder);
       return res.status(200).json(foundFolder);
     } catch (err) {
       return next(err);

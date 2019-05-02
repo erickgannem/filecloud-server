@@ -23,9 +23,14 @@ const fileSchema = new mongoose.Schema(
 );
 
 fileSchema.virtual("url").get(function() {
-  // const { URL } = process.env;
-  // return `${URL}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
   const { URL, PORT } = process.env;
-  return `${URL}${PORT}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+  switch (process.env.ENV) {
+    case "development":
+      return `${URL}${PORT}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+    case "production":
+      return `${URL}/api/users/${this.owner}/folders/${this.folder}/${encodeURIComponent(this.path)}`;
+    default:
+      return;
+  }
 });
 module.exports = new mongoose.model("File", fileSchema);

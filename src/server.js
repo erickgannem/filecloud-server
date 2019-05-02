@@ -1,7 +1,13 @@
 const path = require("path");
-require("dotenv").config({
-  path: path.resolve(__dirname, "..", ".env")
-});
+switch (process.env.ENV) {
+  case "development":
+    return require("dotenv").config({
+      path: path.resolve(__dirname, "..", ".env")
+    });
+  case "production":
+    return require("dotenv").config();
+}
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -48,5 +54,7 @@ app.use(errorHandler);
 
 server.listen(
   PORT,
-  console.log(chalk.bgGreen.black(`Running at: ${process.env.URL}${PORT}`))
+  console.log(
+    chalk.bgGreen.black(`Running at: ${process.env.URL} and port: ${PORT}`)
+  )
 );

@@ -1,6 +1,3 @@
-require("dotenv").config({
-  path: require("path").resolve(__dirname, "..", ".devenv")
-});
 const mongoose = require("mongoose");
 
 mongoose.Promise = Promise;

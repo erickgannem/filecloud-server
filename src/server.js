@@ -1,11 +1,10 @@
+require("dotenv").config();
+
 const path = require("path");
-switch (process.env.ENV) {
-  case "development":
-    return require("dotenv").config({
-      path: path.resolve(__dirname, "..", ".env")
-    });
-  case "production":
-    return require("dotenv").config();
+if (process.env.ENV === "development") {
+  require("dotenv").config({
+    path: path.resolve(__dirname, "..", ".env")
+  });
 }
 
 const express = require("express");

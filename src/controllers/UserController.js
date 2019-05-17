@@ -29,9 +29,9 @@ class User {
           subject: "Your account verification token",
           text: `Please verify your account by following this link: ${
             process.env.URL
-          }${process.env.PORT}/api/token/confirmation/${
+            }/api/token/confirmation/${
             verificationToken.token
-          }`
+            }`
         };
         await sendgridMail.send(message);
       }

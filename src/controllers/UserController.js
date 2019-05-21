@@ -55,10 +55,10 @@ class User {
           req.body.password
         );
 
-        const { _id, username, email, password, folders } = foundUser;
+        const { _id, username, email, password, folders, isVerified } = foundUser;
 
         if (passwordMatches) {
-          if (foundUser.isVerified) {
+          if (isVerified) {
             const token = jwt.sign(
               { _id, username, email, password, folders },
               process.env.SECRET_KEY
@@ -66,7 +66,7 @@ class User {
             req.io.sockets.in(foundUser._id).emit("user", foundUser);
             return res
               .status(200)
-              .json({ _id, username, token, email, password, folders });
+              .json({ _id, username, isVerified, email, token, password, folders });
           } else {
             return next({
               status: 400,

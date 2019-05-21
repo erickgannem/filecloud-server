@@ -13,7 +13,7 @@ class User {
       const user = await db.User.create(req.body);
       const { _id, username, email, password } = user;
       const token = jwt.sign(
-        { _id, username, email, password },
+        { _id, username, email, isVerified: false, password },
         process.env.SECRET_KEY
       );
 
@@ -29,9 +29,7 @@ class User {
           subject: "Your account verification token",
           text: `Please verify your account by following this link: ${
             process.env.URL
-            }/api/token/confirmation/${
-            verificationToken.token
-            }`
+          }/api/token/confirmation/${verificationToken.token}`
         };
         await sendgridMail.send(message);
       }
@@ -55,18 +53,31 @@ class User {
           req.body.password
         );
 
-        const { _id, username, email, password, folders, isVerified } = foundUser;
+        const {
+          _id,
+          username,
+          email,
+          password,
+          folders,
+          isVerified
+        } = foundUser;
 
         if (passwordMatches) {
           if (isVerified) {
             const token = jwt.sign(
-              { _id, username, email, password, folders },
+              { _id, username, email, password, isVerified, folders },
               process.env.SECRET_KEY
             );
             req.io.sockets.in(foundUser._id).emit("user", foundUser);
-            return res
-              .status(200)
-              .json({ _id, username, isVerified, email, token, password, folders });
+            return res.status(200).json({
+              _id,
+              username,
+              isVerified,
+              email,
+              token,
+              password,
+              folders
+            });
           } else {
             return next({
               status: 400,

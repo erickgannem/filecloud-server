@@ -13,6 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
+const morgan = require("morgan");
+const chalk = require("chalk");
 
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./handlers/error");
@@ -20,7 +22,7 @@ const folderRoutes = require("./routes/folder");
 const fileRoutes = require("./routes/files");
 const verificationTokenRoutes = require("./routes/token");
 
-const chalk = require("chalk");
+app.use(morgan("tiny"));
 
 app.use(cors());
 
